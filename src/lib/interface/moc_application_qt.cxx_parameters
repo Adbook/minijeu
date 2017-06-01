@@ -1,0 +1,10 @@
+-I/usr/include/qt4
+-I/usr/include/qt4/QtGui
+-I/usr/include/qt4/QtCore
+-I/home/adrien/MAJEURE IMAGE/tp_modelisation_seance1
+-D$<$<NOT:$<CONFIG:Debug>>:QT_NO_DEBUG>
+-DQT_GUI_LIB
+-DQT_CORE_LIB
+-o
+/home/adrien/MAJEURE IMAGE/tp_modelisation_seance1/src/lib/interface/moc_application_qt.cxx
+/home/adrien/MAJEURE IMAGE/tp_modelisation_seance1/src/lib/interface/application_qt.hpp

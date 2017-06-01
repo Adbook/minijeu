@@ -1,0 +1,8 @@
+cmake-build-debug/*
+CMakeFiles/*
+CMakeCache.txt
+.idea/*
+pgm
+tp_modelisation.pdf
+doc/*
+pgm.cbp
