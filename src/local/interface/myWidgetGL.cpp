@@ -64,6 +64,8 @@ void myWidgetGL::mouseMoveEvent(QMouseEvent *event)
 
     int const ctrl_pressed  = (event->modifiers() & Qt::ControlModifier);
     int const shift_pressed = (event->modifiers() & Qt::ShiftModifier);
+    scene_3d.updateMouse(x, y);
+/*
 
     // Left button controls the rotation
     if (!ctrl_pressed && !shift_pressed && (event->buttons() & Qt::LeftButton) )
@@ -88,14 +90,15 @@ void myWidgetGL::mouseMoveEvent(QMouseEvent *event)
 
     nav.x_previous()=x;
     nav.y_previous()=y;
-
-    updateGL(); PRINT_OPENGL_ERROR();
+*/
+   // updateGL(); PRINT_OPENGL_ERROR();
 
 }
 
 
 void myWidgetGL::timerEvent(QTimerEvent *event)
 {
+    scene_3d.tick(0);
     event->accept();
     updateGL(); PRINT_OPENGL_ERROR();
 }
@@ -108,6 +111,7 @@ myWidgetGL::myWidgetGL(const QGLFormat& format,QGLWidget *parent) :
     QGLWidget(format,parent),nav(),scene_3d(),draw_state(true)
 {
     QWidget::setFocusPolicy(Qt::StrongFocus);
+    setMouseTracking(true);
     startTimer(25); //start timer every 25ms
 }
 

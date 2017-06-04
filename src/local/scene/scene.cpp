@@ -14,6 +14,9 @@
 #include <string>
 #include <sstream>
 
+#define LONGUEUR_CAGE 2
+#define HAUTEUR_CAGE 0.7
+#define OFFSET_CAGE 0.2 //taille des poteaux
 
 using namespace cpe;
 
@@ -130,16 +133,22 @@ cpe::mesh *create_terrain(float xmin, float xmax, float ymin, float ymax, int Nu
 }
 void scene::load_scene()
 {
-
-
     shader_program_id = read_shader("shaders/shader_mesh.vert",
                                     "shaders/shader_mesh.frag");
 
     modele_ballon.load("data/ballon.obj", load_texture_file("data/ballon.png"), shader_program_id);
+    modele_ballon.setScale({0.3, 0.3, 0.3});
+    ballon.reset();
+    ballon.setModel(&modele_ballon);
+    ballon.addForce({0, 11, 15});
+
+
     modele_gant.load("data/glove.obj", load_texture_file("data/glove.png"), shader_program_id);
     modele_gant.translate({0, 1, 0});
+    modele_gant.setScale({0.3, 0.3, 0.3});
+    modele_gant.rotate({0, 0, M_PI});
 
-    modele_terrain.load(*create_plane(-10, 10, -15, 15, 10, 15), load_texture_file("data/terrain.jpg"), shader_program_id);
+    modele_terrain.load(*create_plane(0, 10, 0, 16, 100, 100), load_texture_file("data/terrain.jpg"), shader_program_id);
     modele_terrain.setScale({10, 10, 10});
 
     cpe::mesh cage_mesh = load_mesh_file("data/cage.obj");
@@ -147,52 +156,56 @@ void scene::load_scene()
     cage_mesh.fill_color({1, 1, 1});
     modele_cage.load(cage_mesh, load_texture_file("data/cage.png"), shader_program_id);
     modele_cage.setScale({2, 2, 2});
-    modele_cage.translate({-4.7, 0.45, 0.3});
+    modele_cage.translate({-4.7, 0.45, 0});
     modele_cage.rotate({0, M_PI/2.0f, 0});
-
-    cpe::mat4 world_matrix_zoom; world_matrix_zoom.set_translation({0.0f,0.0f,10});
-    cpe::mat4 world_matrix_translation; world_matrix_translation.set_translation({-5, 0, 0});
-    //cpe::mat4 world_matrix_rotation=;
-    cpe::mat4 world_matrix=world_matrix_zoom/**world_matrix_rotation*/*world_matrix_translation;
-
-    pwidget->nav.tr = {0, 0, 0};
-   /* pwidget->nav.track.set_2d_coords(0, 0, 1, 1);
-    pwidget->nav.track.apply_rotation();*/
-    pwidget->nav.trackball_rotate(0,0);
 }
 
+cpe::vec3 scene::map_mouse_to_goal_coordinates(int mouse_x, int mouse_y, int w, int h){
+    cpe::vec3 ret;
+    ret.z() = 4.7; //CHANGER: need accesseurs pour modele, ou une classe Object, ou constante
+
+    //limites
+    if(mouse_x < 0) mouse_x = 0;
+    if(mouse_y < 0) mouse_y = 0;
+    if(mouse_x > w) mouse_x = w;
+    if(mouse_y > h) mouse_y = h;
+
+    ret.x() =    - ((float)mouse_x / (float) w) *  (LONGUEUR_CAGE - 2*OFFSET_CAGE) + (LONGUEUR_CAGE - 2*OFFSET_CAGE)/2  ;
+    ret.y() = ((float)mouse_y / (float) h) * (HAUTEUR_CAGE ) - HAUTEUR_CAGE;
+
+    modele_gant.translateTo(ret);
+
+    return ret;
+}
 void scene::draw_scene()
 {
-    camera.set_translation({5, -1, 0});
-    cpe::mat4 rotx; rotx.set_rotation({1,0,0}, 0.1);
-    cpe::mat4 roty; roty.set_rotation({0,1,0}, 180);
-    cpe::mat4 rotz; rotz.set_rotation({0,0,1}, 0.1);
-    camera *= rotx * roty * rotz;
-    //camera.set_rotation({1, 0, 0}, 0.1);
+    static float i;
+    i += 0.01;
+    cpe::vec4 cam_translation = {0, -0.45, -5.4, 0};
     //Setup uniform parameters
     glUseProgram(shader_program_id);                                                                           PRINT_OPENGL_ERROR();
-
-    //Get cameras parameters (modelview,projection,normal).
     camera_matrices const& cam=pwidget->camera();
+    glUniform4fv(get_uni_loc(shader_program_id,"cam_translation"),1,cam_translation.pointer());     PRINT_OPENGL_ERROR();
 
-    //Set Uniform data to GPU
-    glUniformMatrix4fv(get_uni_loc(shader_program_id,"camera_modelview"),1,false,camera.pointer());     PRINT_OPENGL_ERROR();
-    //glUniformMatrix4fv(get_uni_loc(shader_program_id,"camera_projection"),1,false,camera.pointer());   PRINT_OPENGL_ERROR();
+
+
+    cpe::mat4 id; id.set_identity();
+
+    glUniformMatrix4fv(get_uni_loc(shader_program_id,"camera_modelview"),1,false,id.pointer());     PRINT_OPENGL_ERROR();
     glUniformMatrix4fv(get_uni_loc(shader_program_id,"camera_projection"),1,false,cam.projection.pointer());   PRINT_OPENGL_ERROR();
     glUniformMatrix4fv(get_uni_loc(shader_program_id,"normal_matrix"),1,false,cam.normal.pointer());           PRINT_OPENGL_ERROR();
 
     modele_gant.draw();
-    modele_ballon.draw();
+    ballon.getModel()->draw();
+    //std::cout << ballon.getModel().getTransformationMatrix() << std::endl;
+    //modele_ballon.draw();
     modele_terrain.draw();
     modele_cage.draw();
-
-
-
 }
 
 
 scene::scene()
-    :shader_program_id(0)
+        :shader_program_id(0)
 {}
 
 
@@ -204,6 +217,18 @@ GLuint scene::load_texture_file(std::string const& filename)
 void scene::set_widget(myWidgetGL* widget_param)
 {
     pwidget=widget_param;
+}
+
+void scene::tick(float time) {
+    std::cout << "tick" << std::endl;
+    ballon.update(0.01f);
+}
+
+void scene::updateMouse(int x, int y) {
+    mouse_x = x;
+    mouse_y = y;
+    map_mouse_to_goal_coordinates(x, y, pwidget->nav.screen_size_x(), pwidget->nav.screen_size_y());
+
 }
 
 

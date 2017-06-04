@@ -44,9 +44,9 @@ add_executable(
   ${source_files}
   ${UI_GENERATED}
   ${MOC_GENERATED}
-        src/local/model.cpp src/local/model.h)
+        src/local/model.cpp src/local/model.h src/local/Ballon.cpp src/local/Ballon.h)
 
 
-TARGET_LINK_LIBRARIES(pgm -lm -ldl -lGLEW ${OPENGL_LIBRARIES} ${QT_LIBRARIES} ${QT_GL_LIBRARIES} ${QT_QTOPENGL_LIBRARY})
+TARGET_LINK_LIBRARIES(pgm -lm -ldl -lGLEW ${OPENGL_LIBRARIES} ${QT_LIBRARIES} ${QT_GL_LIBRARIES} ${QT_QTOPENGL_LIBRARY} ${OpenCV_LIBS})
 
 

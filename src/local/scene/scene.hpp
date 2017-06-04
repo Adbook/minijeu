@@ -16,6 +16,7 @@
 #include "../../lib/interface/camera_matrices.hpp"
 
 #include <vector>
+#include <src/local/Ballon.h>
 #include "../model.h"
 
 
@@ -38,7 +39,10 @@ public:
     /** Set the pointer to the parent Widget */
     void set_widget(myWidgetGL* widget_param);
 
+    void tick(float dt);
+    void updateMouse(int x, int y);
 
+    cpe::vec3 map_mouse_to_goal_coordinates(int mouse_x, int mouse_y, int w, int h);
 private:
 
     /** Load a texture from a given file and returns its id */
@@ -58,7 +62,11 @@ private:
     Model modele_terrain;
     Model modele_cage;
 
+    Ballon ballon;
     cpe::mat4 camera;
+
+    int mouse_x;
+    int mouse_y;
 
 };
 

@@ -30,9 +30,9 @@ myWindow::myWindow(QWidget *parent)
     }
 
     //Connect slot and signals
-    connect(ui->quit,SIGNAL(clicked()),this,SLOT(action_quit()));
+/*    connect(ui->quit,SIGNAL(clicked()),this,SLOT(action_quit()));
     connect(ui->draw,SIGNAL(clicked()),this,SLOT(action_draw()));
-    connect(ui->wireframe,SIGNAL(clicked()),this,SLOT(action_wireframe()));
+    connect(ui->wireframe,SIGNAL(clicked()),this,SLOT(action_wireframe()));*/
 
 }
 
@@ -51,7 +51,7 @@ void myWindow::action_draw()
 
 void myWindow::action_wireframe()
 {
-    bool const state_wireframe=ui->wireframe->isChecked();
-    glWidget->wireframe(state_wireframe);
+    //bool const state_wireframe=ui->wireframe->isChecked();
+    /*glWidget->wireframe(state_wireframe);*/
 }
 

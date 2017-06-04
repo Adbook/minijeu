@@ -48,10 +48,10 @@ RM = /home/adrien/IDEs/clion-2016.3/bin/cmake/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = "/home/adrien/MAJEURE IMAGE/tp_modelisation_seance1"
+CMAKE_SOURCE_DIR = /home/adrien/minijeu
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = "/home/adrien/MAJEURE IMAGE/tp_modelisation_seance1"
+CMAKE_BINARY_DIR = /home/adrien/minijeu
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,9 +80,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start "/home/adrien/MAJEURE IMAGE/tp_modelisation_seance1/CMakeFiles" "/home/adrien/MAJEURE IMAGE/tp_modelisation_seance1/CMakeFiles/progress.marks"
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/adrien/minijeu/CMakeFiles /home/adrien/minijeu/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start "/home/adrien/MAJEURE IMAGE/tp_modelisation_seance1/CMakeFiles" 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/adrien/minijeu/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -960,6 +960,33 @@ src/lib/perlin/perlin.cpp.s:
 	$(MAKE) -f CMakeFiles/pgm.dir/build.make CMakeFiles/pgm.dir/src/lib/perlin/perlin.cpp.s
 .PHONY : src/lib/perlin/perlin.cpp.s
 
+src/local/Ballon.o: src/local/Ballon.cpp.o
+
+.PHONY : src/local/Ballon.o
+
+# target to build an object file
+src/local/Ballon.cpp.o:
+	$(MAKE) -f CMakeFiles/pgm.dir/build.make CMakeFiles/pgm.dir/src/local/Ballon.cpp.o
+.PHONY : src/local/Ballon.cpp.o
+
+src/local/Ballon.i: src/local/Ballon.cpp.i
+
+.PHONY : src/local/Ballon.i
+
+# target to preprocess a source file
+src/local/Ballon.cpp.i:
+	$(MAKE) -f CMakeFiles/pgm.dir/build.make CMakeFiles/pgm.dir/src/local/Ballon.cpp.i
+.PHONY : src/local/Ballon.cpp.i
+
+src/local/Ballon.s: src/local/Ballon.cpp.s
+
+.PHONY : src/local/Ballon.s
+
+# target to generate assembly for a file
+src/local/Ballon.cpp.s:
+	$(MAKE) -f CMakeFiles/pgm.dir/build.make CMakeFiles/pgm.dir/src/local/Ballon.cpp.s
+.PHONY : src/local/Ballon.cpp.s
+
 src/local/interface/main.o: src/local/interface/main.cpp.o
 
 .PHONY : src/local/interface/main.o
@@ -1251,6 +1278,9 @@ help:
 	@echo "... src/lib/perlin/perlin.o"
 	@echo "... src/lib/perlin/perlin.i"
 	@echo "... src/lib/perlin/perlin.s"
+	@echo "... src/local/Ballon.o"
+	@echo "... src/local/Ballon.i"
+	@echo "... src/local/Ballon.s"
 	@echo "... src/local/interface/main.o"
 	@echo "... src/local/interface/main.i"
 	@echo "... src/local/interface/main.s"
